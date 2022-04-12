@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    border: none;
+}
+
+.main_container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 10% 1fr 10%;
+}
+
+.sidebar_left,
+.sidebar_right {
+    background: pink;
+}
+
+.center {
+    display: grid;
+    place-items: center;
+}
+
+.gameboard {
+    border: 2px solid rebeccapurple;
+    display: grid;
+    width: auto;
+    grid-template-columns: 100px 5px 100px 5px 100px;
+    grid-template-rows: 100px 5px 100px 5px 100px;
+}
+
+.column_gap,
+.row_gap {
+    background: rgb(134, 91, 134);
+}
+
+.column_gap {
+    grid-row: 1 / -1;
+}
+
+.column_gap.cgp1 {
+    grid-column: 2;
+}
+
+.column_gap.cgp2 {
+    grid-column: 4;
+}
+
+.row_gap {
+    grid-column: 1 / -1;
+}
+
+.row_gap.rgp1 {
+    grid-row: 2;
+}
+
+.row_gap.rgp2 {
+    grid-row: 4;
+}
+
+.board_tile {
+    background: mistyrose;
+    font-size: 2rem;
+}
+
+.selected {
+    background: rgb(247, 200, 244);
+}
