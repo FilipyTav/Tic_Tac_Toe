@@ -1,7 +1,8 @@
 // (function () {
-const Gameboard = (function () {
-    let tiles = ["", "", "", "", "", "", "", "", ""];
+// TODO: reset_board doesnt work at all
+let tiles = ["", "", "", "", "", "", "", "", ""];
 
+const Gameboard = (function () {
     const tile_buttons = document.querySelectorAll(".board_tile");
 
     const _render_tiles = function () {
@@ -30,7 +31,7 @@ const Gameboard = (function () {
 
     _init();
 
-    return { tiles, tile_buttons, update_board, reset_board };
+    return { /*tiles,*/ tile_buttons, update_board, reset_board };
 })();
 
 const Player = function (player) {
@@ -41,7 +42,7 @@ const Player = function (player) {
     const tile_buttons = Gameboard.tile_buttons;
     const update_board = Gameboard.update_board;
     const reset_board = Gameboard.reset_board;
-    let tiles = Gameboard.tiles;
+    // let tiles = Gameboard.tiles;
 
     const is_x = player === "x" || false;
 
@@ -50,6 +51,8 @@ const Player = function (player) {
     let winner = false;
 
     const play_turn = function () {
+        this.is_turn = true;
+
         const select = function (e) {
             let index = e.target.getAttribute("data_id");
             tiles[index] = `${player}`;
@@ -57,21 +60,36 @@ const Player = function (player) {
 
             is_winner(player) ? (winner = true) : (player = player);
 
-            tile_buttons.forEach((button) => {
-                button.removeEventListener("click", select);
-            });
+            // tile_buttons.forEach((button) => {
+            //     button.removeEventListener("click", x);
+            // });
+
+            this.is_turn = false;
+
+            if (winner) {
+                setTimeout(() => {
+                    winner = false;
+                    reset_board();
+                    alert(`${player} wins!`);
+                }, 100);
+            }
 
             update_board();
         };
 
-        if (is_turn === true) {
+        // Random variable because remove event listener doesnt work unless i do it,
+        // as it completely breaks if using .bind(), for some reason.
+        // Just...why ?
+        let x = select.bind(this);
+
+        if (this.is_turn === true) {
             tile_buttons.forEach((button, index) => {
                 if (
                     !button.classList.contains("selected") &&
                     tiles[index] === ""
                 ) {
-                    button.addEventListener("click", select, {
-                        once: true,
+                    button.addEventListener("click", x, {
+                        // once: true,
                     });
                 }
             });
@@ -123,6 +141,7 @@ const Player = function (player) {
     };
 
     return {
+        player,
         play_turn,
         winner,
         is_turn,
@@ -135,17 +154,13 @@ const play_game = (function () {
     const player1 = Player("X");
     const player2 = Player("O");
 
-    while (player1.winner === false && player2.winner === false && turns <= 9) {
+    while (player1.winner === false && player2.winner === false && turns <= 0) {
         if (turns % 2 === 0) {
-            player1.is_turn = true;
             player1.play_turn();
-            player1.is_turn = false;
 
             turns++;
         } else {
-            player2.is_turn = true;
             player2.play_turn();
-            player2.is_turn = false;
 
             turns++;
         }

@@ -19,12 +19,13 @@ button {
 
 .sidebar_left,
 .sidebar_right {
-    background: pink;
+    background: purple;
 }
 
 .center {
     display: grid;
     place-items: center;
+    background: #222;
 }
 
 .gameboard {
