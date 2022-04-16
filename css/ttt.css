@@ -125,3 +125,8 @@ button {
     opacity: 1;
     pointer-events: all;
 }
+
+#turns {
+    color: #fff;
+    font-size: 4rem;
+}
