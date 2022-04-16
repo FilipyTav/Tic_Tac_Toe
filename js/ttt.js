@@ -146,11 +146,11 @@ const play_game = (function () {
                 return;
             }
 
-            if (player === "X") {
-                player = "O";
+            if (player === player1) {
+                player = player2;
                 play_turn(player);
             } else {
-                player = "X";
+                player = player1;
                 play_turn(player);
             }
         };
