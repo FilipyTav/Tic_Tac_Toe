@@ -2,6 +2,33 @@
 // I could not find any other way of making this work without
 // tiles being a global
 let tiles = ["", "", "", "", "", "", "", "", ""];
+const manage_modal = (function () {
+    const overlay = document.querySelector("#overlay");
+
+    const modal = document.querySelector("#modal");
+
+    overlay.addEventListener("click", _close_modal);
+    modal.addEventListener("click", _close_modal);
+
+    function open_modal(text) {
+        if (modal == null) return;
+
+        modal.textContent = text;
+        modal.classList.add("active");
+        overlay.classList.add("active");
+    }
+
+    function _close_modal() {
+        if (modal == null) return;
+
+        modal.classList.remove("active");
+        overlay.classList.remove("active");
+    }
+
+    return {
+        open_modal,
+    };
+})();
 
 const Gameboard = (function () {
     const tile_buttons = document.querySelectorAll(".board_tile");
@@ -128,7 +155,7 @@ const play_game = (function () {
                 setTimeout(() => {
                     reset_board();
 
-                    alert(`${player} wins!`);
+                    manage_modal.open_modal(`${player} wins!`);
                     turns = 0;
                     game_end = true;
                     play_turn(player);
@@ -139,7 +166,7 @@ const play_game = (function () {
                     turns = 0;
                     reset_board();
 
-                    alert(`It's a draw!`);
+                    manage_modal.open_modal(`It's a draw!`);
                     turns = 0;
                     play_turn(player);
                 }, 100);
@@ -166,4 +193,5 @@ const play_game = (function () {
 
     play_turn(player1);
 })();
+
 // });
