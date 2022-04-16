@@ -1,5 +1,6 @@
 // (function () {
-// TODO: reset_board doesnt work at all
+// I could not find any other way of making this work without
+// tiles being a global
 let tiles = ["", "", "", "", "", "", "", "", ""];
 
 const Gameboard = (function () {
@@ -31,7 +32,7 @@ const Gameboard = (function () {
 
     _init();
 
-    return { /*tiles,*/ tile_buttons, update_board, reset_board };
+    return { tile_buttons, update_board, reset_board };
 })();
 
 const Player = function (player) {
@@ -42,59 +43,10 @@ const Player = function (player) {
     const tile_buttons = Gameboard.tile_buttons;
     const update_board = Gameboard.update_board;
     const reset_board = Gameboard.reset_board;
-    // let tiles = Gameboard.tiles;
-
-    const is_x = player === "x" || false;
 
     let is_turn = null;
 
     let winner = false;
-
-    const play_turn = function () {
-        this.is_turn = true;
-
-        const select = function (e) {
-            let index = e.target.getAttribute("data_id");
-            tiles[index] = `${player}`;
-            e.target.classList.add("selected");
-
-            is_winner(player) ? (winner = true) : (player = player);
-
-            // tile_buttons.forEach((button) => {
-            //     button.removeEventListener("click", x);
-            // });
-
-            this.is_turn = false;
-
-            if (winner) {
-                setTimeout(() => {
-                    winner = false;
-                    reset_board();
-                    alert(`${player} wins!`);
-                }, 100);
-            }
-
-            update_board();
-        };
-
-        // Random variable because remove event listener doesnt work unless i do it,
-        // as it completely breaks if using .bind(), for some reason.
-        // Just...why ?
-        let x = select.bind(this);
-
-        if (this.is_turn === true) {
-            tile_buttons.forEach((button, index) => {
-                if (
-                    !button.classList.contains("selected") &&
-                    tiles[index] === ""
-                ) {
-                    button.addEventListener("click", x, {
-                        // once: true,
-                    });
-                }
-            });
-        }
-    };
 
     const is_winner = function (player) {
         for (let i = 0; i < tiles.length; i++) {
@@ -142,28 +94,76 @@ const Player = function (player) {
 
     return {
         player,
-        play_turn,
+        // play_turn,
         winner,
         is_turn,
+        is_winner,
     };
 };
 
 const play_game = (function () {
+    const player1 = "X";
+    const player2 = "O";
+
+    const reset_board = Gameboard.reset_board;
+    const tile_buttons = Gameboard.tile_buttons;
+    const update_board = Gameboard.update_board;
+    let is_winner = Player("X").is_winner;
+
     let turns = 0;
+    const play_turn = function (player) {
+        ++turns;
+        const select = function (e) {
+            tile_buttons.forEach((button) => {
+                button.removeEventListener("click", select);
+            });
 
-    const player1 = Player("X");
-    const player2 = Player("O");
+            let index = e.target.getAttribute("data_id");
+            tiles[index] = `${player}`;
+            e.target.classList.add("selected");
 
-    while (player1.winner === false && player2.winner === false && turns <= 0) {
-        if (turns % 2 === 0) {
-            player1.play_turn();
+            update_board();
 
-            turns++;
-        } else {
-            player2.play_turn();
+            if (is_winner(player)) {
+                setTimeout(() => {
+                    reset_board();
 
-            turns++;
-        }
-    }
+                    alert(`${player} wins!`);
+                    turns = 0;
+                    game_end = true;
+                    play_turn(player);
+                }, 100);
+                return;
+            } else if (turns === 9) {
+                setTimeout(() => {
+                    turns = 0;
+                    reset_board();
+
+                    alert(`It's a draw!`);
+                    turns = 0;
+                    play_turn(player);
+                }, 100);
+                return;
+            }
+
+            if (player === "X") {
+                player = "O";
+                play_turn(player);
+            } else {
+                player = "X";
+                play_turn(player);
+            }
+        };
+
+        tile_buttons.forEach((button, index) => {
+            if (!button.classList.contains("selected") && tiles[index] === "") {
+                button.addEventListener("click", select, {
+                    once: true,
+                });
+            }
+        });
+    };
+
+    play_turn(player1);
 })();
 // });
