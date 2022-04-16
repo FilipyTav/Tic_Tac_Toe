@@ -138,12 +138,29 @@ const play_game = (function () {
     let is_winner = Player("X").is_winner;
 
     let turns = 0;
+
+    const reset_button = document.querySelector("#reset_board");
+
     const play_turn = function (player) {
         ++turns;
+
+        const restart = function () {
+            reset_board();
+            turns = 0;
+
+            tile_buttons.forEach((button) => {
+                button.removeEventListener("click", select);
+            });
+
+            play_turn(player);
+        };
+
         const select = function (e) {
             tile_buttons.forEach((button) => {
                 button.removeEventListener("click", select);
             });
+
+            reset_button.removeEventListener("click", restart);
 
             let index = e.target.getAttribute("data_id");
             tiles[index] = `${player}`;
@@ -157,13 +174,11 @@ const play_game = (function () {
 
                     manage_modal.open_modal(`${player} wins!`);
                     turns = 0;
-                    game_end = true;
                     play_turn(player);
                 }, 100);
                 return;
             } else if (turns === 9) {
                 setTimeout(() => {
-                    turns = 0;
                     reset_board();
 
                     manage_modal.open_modal(`It's a draw!`);
@@ -189,6 +204,8 @@ const play_game = (function () {
                 });
             }
         });
+
+        reset_button.addEventListener("click", restart, { once: true });
     };
 
     play_turn(player1);

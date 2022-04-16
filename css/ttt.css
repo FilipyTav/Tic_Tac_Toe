@@ -75,12 +75,20 @@ button {
     background: rgb(247, 200, 244);
 }
 
+#reset_board {
+    cursor: pointer;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+
 #modal {
     border: 1px solid rgb(161, 112, 161);
     border-radius: 10px;
     color: #fff;
     font-size: 5rem;
     padding: 50px;
+    min-width: 80%;
+    text-align: center;
 
     position: fixed;
     top: 50%;
