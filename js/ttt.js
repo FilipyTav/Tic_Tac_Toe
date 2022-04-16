@@ -134,6 +134,8 @@ const play_game = (function () {
 
     let turns_display = document.querySelector("#turns");
 
+    let whose_turn = document.querySelector("#player");
+
     const reset_board = Gameboard.reset_board;
     const tile_buttons = Gameboard.tile_buttons;
     const update_board = Gameboard.update_board;
@@ -146,6 +148,8 @@ const play_game = (function () {
     const play_turn = function (player) {
         ++turns;
         turns_display.textContent = `Turn ${turns}`;
+
+        whose_turn.textContent = `Player ${player} turn`;
 
         const restart = function () {
             reset_board();
