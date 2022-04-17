@@ -1,3 +1,10 @@
+:root {
+    --secondary_color: #0c0032;
+    --main_color: #190061;
+    --dark_color: #280828;
+    --light_color: #3500d3;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -25,7 +32,7 @@ button {
 .center {
     display: grid;
     place-items: center;
-    background: #222;
+    background: var(--dark_color);
 }
 
 .gameboard {
@@ -76,9 +83,19 @@ button {
 }
 
 #reset_board {
+    border: 2px solid var(--light_color);
+    color: var(--light_color);
+    background: var(--dark_color);
+
+    font-weight: bold;
     cursor: pointer;
     padding: 10px 30px;
     border-radius: 10px;
+}
+
+#reset_board:hover {
+    color: mistyrose;
+    background: var(--light_color);
 }
 
 #modal {
@@ -128,7 +145,7 @@ button {
 
 #turns,
 #player {
-    color: #fff;
+    color: var(--light_color);
     font-size: 2.8rem;
     font-weight: bold;
 }
